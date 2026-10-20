@@ -1,0 +1,1028 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ember & Olive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f5f0eb;
+        --bg-soft: #f2e7dd;
+        --paper: #f6f3ef;
+        --white: #ffffff;
+        --black: #1d1715;
+        --text: #221c1a;
+        --muted: #6d5d58;
+        --brown: #3c231d;
+        --gold: #d6b07b;
+        --gold-deep: #a66a3f;
+        --line: rgba(31, 26, 23, 0.12);
+        --shadow: 0 24px 55px rgba(21, 14, 12, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+
+      .container {
+        width: min(1180px, calc(100% - 36px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(17, 12, 10, 0.68);
+        backdrop-filter: blur(6px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .nav {
+        min-height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .brand {
+        color: #f9f0e6;
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-transform: none;
+      }
+
+      .nav-links a {
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover {
+        color: #fff;
+      }
+
+      .nav-btn {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 999px;
+        padding: 12px 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .hero {
+        position: relative;
+        min-height: 780px;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.5)),
+          url("https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 1;
+        padding: 120px 0 64px;
+      }
+
+      .hero-content {
+        width: min(760px, 100%);
+        margin: 0 auto;
+        text-align: center;
+        color: #fff;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #f0eade;
+      }
+
+      .hero h1 {
+        font-family: "Cormorant Garamond", serif;
+        margin: 26px 0 18px;
+        font-size: clamp(3.5rem, 8vw, 7rem);
+        line-height: 0.9;
+        letter-spacing: -0.06em;
+        font-weight: 600;
+      }
+
+      .hero .sub {
+        margin: 0 auto;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 1.1rem;
+      }
+
+      .hero-actions {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 34px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 170px;
+        min-height: 52px;
+        padding: 12px 24px;
+        border-radius: 999px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn.primary {
+        background: rgba(255, 255, 255, 0.93);
+        color: var(--black);
+      }
+
+      .btn.primary:hover {
+        background: #fff;
+      }
+
+      .btn.light {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
+
+      .btn.light:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+
+      .feature-strip {
+        width: min(1160px, calc(100% - 36px));
+        margin: -38px auto 0;
+        position: relative;
+        z-index: 3;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+      }
+
+      .feature-item {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(18, 11, 10, 0.08);
+        backdrop-filter: blur(8px);
+        border-radius: 18px;
+        padding: 18px 14px;
+        text-align: center;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+      }
+
+      .feature-icon {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 10px;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        background: #f7e9d8;
+        color: var(--gold-deep);
+        font-size: 1.8rem;
+      }
+
+      .feature-item h4 {
+        margin: 0 0 6px;
+        font-size: 0.98rem;
+      }
+
+      .feature-item p {
+        margin: 0;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .story {
+        background: #f6f1eb;
+        padding: 90px 0 70px;
+      }
+
+      .story-layout {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 50px;
+        align-items: center;
+      }
+
+      .story-photo {
+        position: relative;
+        overflow: hidden;
+        border-radius: 30px 30px 30px 30px;
+        box-shadow: var(--shadow);
+      }
+
+      .story-photo img {
+        width: 100%;
+        height: 600px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .story-card {
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        border-radius: 26px;
+        padding: 18px 20px;
+        position: absolute;
+        left: 28px;
+        bottom: 28px;
+        max-width: 240px;
+      }
+
+      .story-card .tag {
+        display: inline-block;
+        background: #f0d4a5;
+        color: var(--gold-deep);
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+      }
+
+      .story-card h3 {
+        margin: 12px 0 6px;
+        font-size: 1.2rem;
+      }
+
+      .story-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .story-text h2 {
+        margin: 0 0 18px;
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2.8rem, 5vw, 4.5rem);
+        line-height: 0.8;
+        letter-spacing: -0.04em;
+      }
+
+      .story-text p {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 1.04rem;
+      }
+
+      .story-text .cta {
+        margin-top: 18px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 13px 22px;
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 999px;
+        font-weight: 600;
+      }
+
+      .menu-section {
+        background: #f8f6f3;
+        padding: 88px 0 70px;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 20px;
+        margin-bottom: 28px;
+      }
+
+      .section-head h2 {
+        margin: 0;
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2.8rem, 5vw, 4.2rem);
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+      }
+
+      .section-head p {
+        max-width: 640px;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .menu-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(20, 12, 10, 0.03);
+      }
+
+      .menu-card img {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+      }
+
+      .menu-card .body {
+        padding: 16px 16px 18px;
+      }
+
+      .menu-card .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+
+      .menu-card h4 {
+        margin: 0;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2rem;
+        line-height: 1;
+      }
+
+      .price {
+        color: var(--gold-deep);
+        font-weight: 700;
+      }
+
+      .menu-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .testimonials {
+        background: #f4efe9;
+        padding: 82px 0 90px;
+      }
+
+      .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .testimonial {
+        background: #fff;
+        border-radius: 24px;
+        padding: 22px 20px;
+        border: 1px solid var(--line);
+      }
+
+      .stars {
+        color: #e3b963;
+        letter-spacing: 0.18em;
+        font-size: 0.92rem;
+      }
+
+      .testimonial p {
+        color: var(--muted);
+        margin: 18px 0 20px;
+      }
+
+      .person {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f2d7af, #c57944);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .person strong {
+        display: block;
+        font-size: 0.98rem;
+      }
+
+      .person span {
+        color: var(--muted);
+        font-size: 0.74rem;
+      }
+
+      .reserve {
+        padding: 26px 0 90px;
+      }
+
+      .reserve-box {
+        background:
+          linear-gradient(rgba(10, 8, 7, 0.5), rgba(10, 8, 7, 0.56)),
+          url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+        border-radius: 26px;
+        padding: 42px 38px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 30px;
+        color: #fff;
+      }
+
+      .reserve-box h2 {
+        margin: 0 0 8px;
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        line-height: 0.9;
+      }
+
+      .reserve-box p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1.1rem;
+      }
+
+      .contact {
+        background: #f7f3ee;
+        padding: 30px 0 70px;
+      }
+
+      .contact-wrap {
+        display: grid;
+        grid-template-columns: 0.95fr 1.05fr;
+        gap: 50px;
+        align-items: start;
+      }
+
+      .contact-info h3 {
+        margin: 0 0 12px;
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2.4rem, 5vw, 4rem);
+        line-height: 1;
+      }
+
+      .contact-info p {
+        color: var(--muted);
+        margin: 0 0 26px;
+      }
+
+      .contact-list {
+        display: grid;
+        gap: 16px;
+        color: var(--text);
+        font-size: 1rem;
+      }
+
+      .contact-list .row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .contact-list .icon {
+        width: 24px;
+        color: var(--gold-deep);
+        font-size: 1.1rem;
+      }
+
+      .contact-form {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(29, 23, 21, 0.08);
+        border-radius: 24px;
+        padding: 26px 24px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-field.full {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid rgba(25, 18, 16, 0.12);
+        background: #fff;
+        border-radius: 12px;
+        padding: 14px 14px;
+        color: var(--text);
+        resize: vertical;
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: 2px solid rgba(166, 106, 63, 0.2);
+        border-color: rgba(166, 106, 63, 0.5);
+      }
+
+      .send-btn {
+        margin-top: 18px;
+        background: var(--black);
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 14px 26px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .send-btn:hover {
+        background: #2b201d;
+      }
+
+      footer {
+        padding: 26px 0 56px;
+        background: #f7f3ee;
+      }
+
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+        border-top: 1px solid var(--line);
+        padding-top: 18px;
+        color: var(--muted);
+      }
+
+      @media (max-width: 980px) {
+        .feature-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .story-layout,
+        .contact-wrap,
+        .menu-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .menu-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .testimonial-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .reserve-box {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .nav-links {
+          display: none;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .hero {
+          min-height: 660px;
+        }
+
+        .hero-inner {
+          padding-top: 90px;
+        }
+
+        .feature-grid,
+        .menu-grid,
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .section-head {
+          display: block;
+        }
+
+        .story-photo img {
+          height: 500px;
+        }
+
+        .reserve-box {
+          padding: 28px 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand">Ember & Olive</div>
+
+        <nav class="nav-links">
+          <a href="#">Home</a>
+          <a href="#about">About</a>
+          <a href="#menu">Menu</a>
+          <a href="#contact">Contact us</a>
+        </nav>
+
+        <button class="nav-btn">Book a Table</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-inner">
+          <div class="hero-content">
+            <span class="eyebrow">Fine dining experience</span>
+            <h1>Your Table, Your Experience</h1>
+            <p class="sub">
+              At the Oak & Crave, every dish is crafted to turn simple meals into
+              memorable experiences. We combine fresh ingredients, bold flavors,
+              and expert preparation to create food worth sharing.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn primary" href="#about">About us</a>
+              <a class="btn light" href="#menu">View our menu</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="feature-strip">
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🌿</div>
+            <h4>Fresh Ingredients</h4>
+            <p>Locally sourced and carefully selected</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">👨‍🍳</div>
+            <h4>Expert Chefs</h4>
+            <p>Passionate culinary artistry in every dish</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎉</div>
+            <h4>Great for Any Occasion</h4>
+            <p>Perfect for dates, celebrations, or dinner</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💬</div>
+            <h4>Happy Customers</h4>
+            <p>Your feedback inspires our craft</p>
+          </div>
+        </div>
+      </div>
+
+      <section class="story" id="about">
+        <div class="container story-layout">
+          <div class="story-photo">
+            <img
+              src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80"
+              alt="Restaurant interior"
+            />
+            <div class="story-card">
+              <span class="tag">Chef’s Special</span>
+              <h3>Truffle Pasta</h3>
+              <p>Slow-cooked, rich, comforting, and unforgettable.</p>
+            </div>
+          </div>
+
+          <div class="story-text">
+            <h2>Where Every Meal Tells a Story</h2>
+            <p>
+              At the Oak & Crave, we bring together seasonal ingredients,
+              refined techniques, and warm hospitality to create a dining
+              experience that feels both elevated and personal.
+            </p>
+            <p>
+              From lively dinners to intimate nights, every plate is designed
+              to spark conversation, satisfy cravings, and create lasting
+              memories around the table.
+            </p>
+            <a href="#menu" class="cta">Discover our story</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="menu-section" id="menu">
+        <div class="container">
+          <div class="section-head">
+            <h2>Our Menu</h2>
+            <p>
+              Explore a delicious selection of carefully prepared dishes, made
+              with fresh ingredients and bold flavors for every craving.
+            </p>
+          </div>
+
+          <div class="menu-grid">
+            <article class="menu-card">
+              <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" alt="Grilled Steak">
+              <div class="body">
+                <div class="top">
+                  <h4>Grilled Steak</h4>
+                  <span class="price">$18.00</span>
+                </div>
+                <p>Perfectly seared and finished with herb butter.</p>
+              </div>
+            </article>
+
+            <article class="menu-card">
+              <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=800&q=80" alt="Jollof Rice and Chicken">
+              <div class="body">
+                <div class="top">
+                  <h4>Jollof Rice</h4>
+                  <span class="price">$12.00</span>
+                </div>
+                <p>Rich tomato rice with bold spices and tender chicken.</p>
+              </div>
+            </article>
+
+            <article class="menu-card">
+              <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80" alt="Fruit Juice">
+              <div class="body">
+                <div class="top">
+                  <h4>Fruit Juice</h4>
+                  <span class="price">$5.00</span>
+                </div>
+                <p>Freshly blended with citrus, berries, and tropical notes.</p>
+              </div>
+            </article>
+
+            <article class="menu-card">
+              <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" alt="Chocolate Lava Cake">
+              <div class="body">
+                <div class="top">
+                  <h4>Chocolate Cake</h4>
+                  <span class="price">$9.00</span>
+                </div>
+                <p>Warm center, decadent finish, and silky cocoa richness.</p>
+              </div>
+            </article>
+
+            <article class="menu-card">
+              <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80" alt="Seafood Pasta">
+              <div class="body">
+                <div class="top">
+                  <h4>Seafood Pasta</h4>
+                  <span class="price">$15.00</span>
+                </div>
+                <p>Fresh shellfish with garlic, herbs, and creamy sauce.</p>
+              </div>
+            </article>
+
+            <article class="menu-card">
+              <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" alt="Spaghetti">
+              <div class="body">
+                <div class="top">
+                  <h4>Spaghetti</h4>
+                  <span class="price">$11.00</span>
+                </div>
+                <p>Classic comfort dish filled with roasted vegetables and herbs.</p>
+              </div>
+            </article>
+
+            <article class="menu-card">
+              <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=800&q=80" alt="Mixed Fried Rice">
+              <div class="body">
+                <div class="top">
+                  <h4>Mixed Rice</h4>
+                  <span class="price">$14.00</span>
+                </div>
+                <p>Flavor-packed rice with veggies, spices, and savory depth.</p>
+              </div>
+            </article>
+
+            <article class="menu-card">
+              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Catering">
+              <div class="body">
+                <div class="top">
+                  <h4>Chef’s Bowl</h4>
+                  <span class="price">$16.00</span>
+                </div>
+                <p>Seasonal vegetables, grains, and aromatic finishing touches.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="testimonials">
+        <div class="container">
+          <div class="section-head">
+            <h2>What Our Guests Say</h2>
+            <p>Real experiences from our diners across every celebration and gathering.</p>
+          </div>
+
+          <div class="testimonial-grid">
+            <article class="testimonial">
+              <div class="stars">★★★★★</div>
+              <p>
+                “The food is exceptional and the ambiance is warm and classy.
+                It feels like a place you want to return to again and again.”
+              </p>
+              <div class="person">
+                <div class="avatar">T</div>
+                <div>
+                  <strong>Tommy A.</strong>
+                  <span>Weekend dinner</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="testimonial">
+              <div class="stars">★★★★★</div>
+              <p>
+                “Everything from the starters to dessert was perfectly cooked.
+                The service was welcoming and the atmosphere was unforgettable.”
+              </p>
+              <div class="person">
+                <div class="avatar">D</div>
+                <div>
+                  <strong>Daniel I.</strong>
+                  <span>Anniversary</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="testimonial">
+              <div class="stars">★★★★★</div>
+              <p>
+                “A beautiful restaurant with standout flavors and a polished
+                dining experience. We loved every course and every detail.”
+              </p>
+              <div class="person">
+                <div class="avatar">A</div>
+                <div>
+                  <strong>Amaka O.</strong>
+                  <span>Celebration</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="reserve">
+        <div class="container">
+          <div class="reserve-box">
+            <div>
+              <h2>Good Food Brings People Together</h2>
+              <p>Book your table and let us take care of the rest.</p>
+            </div>
+            <button class="btn primary">Book a Table</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact" id="contact">
+        <div class="container contact-wrap">
+          <div class="contact-info">
+            <h3>Get in touch</h3>
+            <p>
+              We would love to hear from you and help with your next dining
+              experience. Reach out and we’ll get back to you shortly.
+            </p>
+
+            <div class="contact-list">
+              <div class="row">
+                <div class="icon">📍</div>
+                <span>24 Victoria Island, Lagos</span>
+              </div>
+              <div class="row">
+                <div class="icon">📞</div>
+                <span>+234 800 123 4567</span>
+              </div>
+              <div class="row">
+                <div class="icon">✉️</div>
+                <span>hello@emberandolive.com</span>
+              </div>
+              <div class="row">
+                <div class="icon">🕒</div>
+                <span>Monday – Sunday: 10AM – 11PM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form">
+            <form>
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="name">Full Name</label>
+                  <input id="name" type="text" placeholder="Your full name" />
+                </div>
+
+                <div class="form-field">
+                  <label for="email">Email</label>
+                  <input id="email" type="email" placeholder="Your email" />
+                </div>
+
+                <div class="form-field">
+                  <label for="phone">Phone Number</label>
+                  <input id="phone" type="tel" placeholder="Your phone number" />
+                </div>
+
+                <div class="form-field">
+                  <label for="location">Location</label>
+                  <input id="location" type="text" placeholder="Your city / area" />
+                </div>
+
+                <div class="form-field full">
+                  <label for="message">Your Message</label>
+                  <textarea id="message" rows="5" placeholder="Tell us how we can help"></textarea>
+                </div>
+              </div>
+
+              <button class="send-btn" type="submit">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div class="brand" style="color: var(--text); font-size: 2.2rem;">Ember & Olive</div>
+        <div>© 2026 Ember & Olive</div>
+      </div>
+    </footer>
+  </body>
+</html>
